@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "blog-updater": {
+      "description": "自动更新 GitHub Pages 博客",
+      "command": "D:\\trae\\tra_projects\\github_page_update\\run_mcp_blog_updater.bat",
+      "args": [],
+      "env": {}
+    }
+  }
+}
