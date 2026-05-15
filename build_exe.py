@@ -2,9 +2,11 @@
 Build script: packages blog_updater.py into a standalone EXE.
 Run: python build_exe.py
 """
+
 import subprocess
 import sys
 import os
+
 
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,11 +20,19 @@ def main():
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
 
     cmd = [
-        sys.executable, "-m", "PyInstaller",
-        "--onefile",           # single EXE
-        "--windowed",          # no console window
-        "--name", "博客自动更新工具",
-        "--icon", os.path.join(script_dir, "icon.ico") if os.path.exists(os.path.join(script_dir, "icon.ico")) else "",
+        sys.executable,
+        "-m",
+        "PyInstaller",
+        "--onefile",  # single EXE
+        "--windowed",  # no console window
+        "--name",
+        "博客自动更新工具",
+        "--icon",
+        (
+            os.path.join(script_dir, "icon.ico")
+            if os.path.exists(os.path.join(script_dir, "icon.ico"))
+            else ""
+        ),
         "--clean",
         "--noconfirm",
         script_path,

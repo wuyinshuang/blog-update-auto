@@ -30,6 +30,7 @@ GIT_COMMIT_MSG = "update blog"
 
 # ---------- core logic (sync, returns structured result) ----------
 
+
 def copy_images() -> List[Dict[str, str]]:
     """Copy _posts/images -> images, skip duplicates. Return file ops."""
     src = os.path.join(GIT_DIR, "_posts", "images")
@@ -134,13 +135,15 @@ def update_blog_sync() -> Dict:
     image_ops = copy_images()
     copied_count = sum(1 for o in image_ops if o["status"] == "copied")
     skipped_count = sum(1 for o in image_ops if o["status"] == "skipped")
-    result["steps"].append({
-        "step": "复制图片",
-        "command": f"copy _posts/images -> images",
-        "details": image_ops,
-        "summary": f"复制 {copied_count} 个，跳过 {skipped_count} 个",
-        "success": True,
-    })
+    result["steps"].append(
+        {
+            "step": "复制图片",
+            "command": f"copy _posts/images -> images",
+            "details": image_ops,
+            "summary": f"复制 {copied_count} 个，跳过 {skipped_count} 个",
+            "success": True,
+        }
+    )
 
     # Step 1: git add .
     r1 = run_git_cmd("git add .")
@@ -195,6 +198,7 @@ def update_blog_sync() -> Dict:
 
 # ---------- MCP server ----------
 
+
 def serve_mcp():
     """Run the MCP server over stdio (compatible with MCP factory / stdio transport)."""
     try:
@@ -203,7 +207,7 @@ def serve_mcp():
         import mcp.server.stdio
         import mcp.types as types
     except ImportError:
-        print('需要安装 mcp 包: pip install mcp', file=sys.stderr)
+        print("需要安装 mcp 包: pip install mcp", file=sys.stderr)
         sys.exit(1)
 
     server = Server("blog-updater")
@@ -239,7 +243,9 @@ def serve_mcp():
             details = step.get("details")
             if details:
                 for d in details:
-                    icon = {"copied": "✅", "skipped": "⏭️", "warning": "⚠️"}.get(d["status"], "")
+                    icon = {"copied": "✅", "skipped": "⏭️", "warning": "⚠️"}.get(
+                        d["status"], ""
+                    )
                     lines.append(f"  {icon} {d.get('file', '')} {d['message']}")
 
             if step.get("summary"):
@@ -264,7 +270,9 @@ def serve_mcp():
             if gh.get("verified"):
                 lc = gh.get("latest_commit")
                 if lc:
-                    lines.append(f"  ✅ 验证成功！最新提交: {lc['sha']} - {lc['message']}")
+                    lines.append(
+                        f"  ✅ 验证成功！最新提交: {lc['sha']} - {lc['message']}"
+                    )
                 else:
                     lines.append("  ✅ 验证成功")
             else:
@@ -293,6 +301,7 @@ def serve_mcp():
             )
 
     import asyncio
+
     asyncio.run(run())
 
 

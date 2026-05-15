@@ -1,0 +1,23 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "powershell -File \"D:\\trae\\tra_projects\\github_page_update\\.claude\\statusline.ps1\""
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit *)",
+            "command": "python -m black --check \"D:\\trae\\tra_projects\\github_page_update\\*.py\"; if ($LASTEXITCODE -ne 0) { Write-Output '{\"continue\":false,\"stopReason\":\"代码格式不符合 black 规范，请先运行 python -m black . 格式化代码\"}' }",
+            "shell": "powershell",
+            "timeout": 30,
+            "statusMessage": "正在用 black 检查代码格式..."
+          }
+        ]
+      }
+    ]
+  }
+}

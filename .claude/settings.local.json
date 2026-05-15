@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npx skills add https://github.com/vercel-labs/skills --skill find-skills)",
+      "PowerShell(npx skills find \"frontend optimization\")",
+      "WebFetch(domain:skills.sh)",
+      "PowerShell(head *)",
+      "PowerShell(npx skills find --help 2>&1 | Select-Object -First 30)",
+      "PowerShell(npx skills find 2>&1 | Select-Object -First 50)",
+      "Skill(update-config)",
+      "PowerShell(python -m black --version 2>&1)",
+      "PowerShell(pip install *)",
+      "PowerShell(jq *)",
+      "PowerShell(python -m json.tool \"D:\\\\trae\\\\tra_projects\\\\github_page_update\\\\.claude\\\\settings.json\" 2>&1 | Select-Object -First 3)",
+      "PowerShell(python -c \"import json; json.load\\(open\\(r'D:\\\\trae\\\\tra_projects\\\\github_page_update\\\\.claude\\\\settings.json', encoding='utf-8'\\)\\); print\\('JSON is valid'\\)\" 2>&1)",
+      "PowerShell(git add *)"
+    ]
+  }
+}

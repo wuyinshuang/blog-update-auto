@@ -9,7 +9,6 @@ import shutil
 import urllib.request
 import urllib.error
 
-
 GIT_DIR = r"D:\github_page\wuyinshuang.github.io"
 GITHUB_REPO_URL = "https://github.com/wuyinshuang/wuyinshuang.github.io"
 
@@ -44,7 +43,9 @@ def copy_images(text_widget):
         text_widget.insert(tk.END, f"  复制: {fname}\n", "output")
         copied += 1
 
-    text_widget.insert(tk.END, f"  完成: 复制 {copied} 个文件，跳过 {skipped} 个文件\n", "success")
+    text_widget.insert(
+        tk.END, f"  完成: 复制 {copied} 个文件，跳过 {skipped} 个文件\n", "success"
+    )
     text_widget.see(tk.END)
 
 
@@ -93,12 +94,16 @@ def check_github_push(text_widget):
         try:
             req = urllib.request.Request(
                 api_url,
-                headers={"User-Agent": "Mozilla/5.0", "Accept": "application/vnd.github.v3+json"},
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept": "application/vnd.github.v3+json",
+                },
             )
             with urllib.request.urlopen(req, timeout=15) as resp:
                 if resp.status == 200:
                     data = resp.read().decode("utf-8")
                     import json
+
                     commits = json.loads(data)
                     if commits:
                         latest = commits[0]
@@ -115,19 +120,33 @@ def check_github_push(text_widget):
                             f"  消息: {msg}\n",
                             "success",
                         )
-                    text_widget.insert(tk.END, "\n✅ GitHub 推送验证成功！远程仓库已更新。\n", "success")
+                    text_widget.insert(
+                        tk.END,
+                        "\n✅ GitHub 推送验证成功！远程仓库已更新。\n",
+                        "success",
+                    )
                     return True
             break
         except urllib.error.HTTPError as e:
             if e.code == 403 and attempt < retries - 1:
-                text_widget.insert(tk.END, f"API 限流，{3 ** (attempt + 1)} 秒后重试...\n", "warning")
+                text_widget.insert(
+                    tk.END, f"API 限流，{3 ** (attempt + 1)} 秒后重试...\n", "warning"
+                )
                 time.sleep(3 ** (attempt + 1))
                 continue
-            text_widget.insert(tk.END, f"\n无法通过 API 验证 (HTTP {e.code})，将直接打开网页。\n", "warning")
+            text_widget.insert(
+                tk.END,
+                f"\n无法通过 API 验证 (HTTP {e.code})，将直接打开网页。\n",
+                "warning",
+            )
             break
         except Exception as e:
             if attempt < retries - 1:
-                text_widget.insert(tk.END, f"API 访问失败 ({e})，{3 ** (attempt + 1)} 秒后重试...\n", "warning")
+                text_widget.insert(
+                    tk.END,
+                    f"API 访问失败 ({e})，{3 ** (attempt + 1)} 秒后重试...\n",
+                    "warning",
+                )
                 time.sleep(3 ** (attempt + 1))
                 continue
             text_widget.insert(tk.END, f"\nAPI 访问失败: {e}\n", "error")
@@ -135,6 +154,7 @@ def check_github_push(text_widget):
 
     # Fallback: open the web page
     import webbrowser
+
     text_widget.insert(tk.END, f"正在打开网页: {GITHUB_REPO_URL}\n", "info")
     webbrowser.open(GITHUB_REPO_URL)
     text_widget.insert(tk.END, "请手动确认网页是否正常显示最新提交。\n", "info")
@@ -164,7 +184,9 @@ def update_blog(btn, text_widget):
     rc2, _ = run_command('git commit -m "update blog"', GIT_DIR, text_widget, "output")
     if rc2 != 0:
         # If nothing to commit, still ok
-        text_widget.insert(tk.END, "\n⚠️  没有新的更改需要提交，继续推送...\n", "warning")
+        text_widget.insert(
+            tk.END, "\n⚠️  没有新的更改需要提交，继续推送...\n", "warning"
+        )
 
     # 3) git push
     rc3, _ = run_command("git push", GIT_DIR, text_widget, "output")
@@ -199,7 +221,13 @@ def build_gui():
     root.resizable(True, True)
 
     try:
-        root.iconbitmap(default=os.path.join(os.path.dirname(__file__), "icon.ico") if hasattr(sys, "_MEIPASS") else "")
+        root.iconbitmap(
+            default=(
+                os.path.join(os.path.dirname(__file__), "icon.ico")
+                if hasattr(sys, "_MEIPASS")
+                else ""
+            )
+        )
     except Exception:
         pass
 
